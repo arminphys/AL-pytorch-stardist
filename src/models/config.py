@@ -291,6 +291,8 @@ class Config2D(ConfigBase):
         self.lr_linear_n_epochs             = 100
         self.lr_decay_iters                 = 100
         self.T_max                          = 2
+
+        self.device                         = "mps"
     
         self.update_params(**kwargs)
 

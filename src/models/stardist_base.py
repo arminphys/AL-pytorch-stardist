@@ -51,7 +51,7 @@ class StarDistBase(nn.Module):
             warnings.warn("GPU is not used (use_gpu=False), so `use_amp` is set to False")
             self.use_amp = False
 
-        self.device = torch.device(f"cuda:0") if opt.use_gpu else torch.device("cpu")
+        self.device = torch.device(opt.device) if opt.use_gpu else torch.device("cpu")
         self.logger=Logger()
 
         # Define and load networks
@@ -95,7 +95,7 @@ class StarDistBase(nn.Module):
         opt = self.opt
         self.optimizer = torch.optim.Adam( self.net.parameters() , lr=opt.lr, betas=(opt.beta1, opt.beta2) )
         self.lr_scheduler = get_scheduler(self.optimizer, opt, init_lr=opt.lr)
-        self.amp_scaler = torch.cuda.amp.GradScaler(enabled=self.use_amp)
+        self.amp_scaler = torch.amp.GradScaler(opt.device, enabled=self.use_amp)#torch.cuda.amp.GradScaler(enabled=self.use_amp)
 
     
     def set_criterions(self):
@@ -126,7 +126,8 @@ class StarDistBase(nn.Module):
 
         batch_size = image.shape[0]
 
-        with torch.cuda.amp.autocast(enabled=self.use_amp):
+        #with torch.cuda.amp.autocast(enabled=self.use_amp):
+        with torch.autocast(device_type=opt.device, enabled=self.use_amp):
             pred_dist, pred_prob, pred_prob_class = self.net(image)
 
             loss_dist = self.criterion_dist(pred_dist, dist, mask=prob)
@@ -179,8 +180,8 @@ class StarDistBase(nn.Module):
         
         batch_size = image.shape[0]
         
-
-        with torch.cuda.amp.autocast(enabled=self.use_amp):
+        #with torch.cuda.amp.autocast(enabled=self.use_amp):
+        with torch.autocast(device_type=opt.device, enabled=self.use_amp):
             pred_dist, pred_prob, pred_prob_class = self.net(image)
 
             loss_dist = self.criterion_dist(pred_dist, dist, mask=prob)

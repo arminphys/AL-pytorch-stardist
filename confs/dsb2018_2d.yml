@@ -36,7 +36,7 @@ crop_size                      : [256, 256]
 # ========================= Training ==================================
 
 use_gpu                        : True
-use_amp                        : True
+use_amp                        : False
 isTrain                        : True 
 evaluate                       : True
 

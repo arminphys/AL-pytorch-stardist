@@ -23,7 +23,6 @@ from src.models.stardist2d import StarDist2D
 from evaluate import evaluate
 
 
-
 def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--yaml_conf", type=str, help="YAML configuration file.")
@@ -43,7 +42,7 @@ def run():
 
     with open(args.yaml_conf) as yconf:
         opt = yaml.safe_load(yconf)
-    
+
     if len(opt['kernel_size'])==2:
         Config = Config2D
         StarDist = StarDist2D

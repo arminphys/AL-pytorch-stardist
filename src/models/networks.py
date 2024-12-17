@@ -42,11 +42,11 @@ class BaseNetwork(nn.Module):
         Return an initialized network.
         """
         if len(gpu_ids)==1:
-            assert(torch.cuda.is_available()), "cuda is not available."
+            assert(torch.cuda.is_available() or torch.mps.is_available()), "neither mps nor cuda is available."
             self.to(gpu_ids[0])
 
         elif len(gpu_ids) > 1:
-            assert(torch.cuda.is_available()), "cuda is not available."
+            assert(torch.cuda.is_available() or torch.mps.is_available()), "neither mps nor cuda is available."
             self.to(gpu_ids[0])
             self = torch.nn.DataParallel(self, gpu_ids)  # multi-GPUs
         self.init_weights(init_type, init_gain=init_gain)
